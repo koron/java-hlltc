@@ -1,0 +1,12 @@
+plugins {
+    id 'java-library'
+}
+
+dependencies {
+    implementation 'com.adgear:metrohash:1.0.0'
+    testImplementation 'junit:junit:4.12'
+}
+
+repositories {
+    jcenter()
+}
