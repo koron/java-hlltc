@@ -42,4 +42,16 @@ class Utils {
             -0.03053811369682807 * Math.pow(zl, 6) +
             0.00155770210179105 * Math.pow(zl, 7);
     }
+
+    static double alpha(int m) {
+        switch (m) {
+            case 16:
+                return 0.673;
+            case 32:
+                return 0.697;
+            case 64:
+                return 0.709;
+        }
+	return 0.7213 / (1 + 1.079/(double)m);
+    }
 }

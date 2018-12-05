@@ -30,17 +30,18 @@ class Registers {
     }
 
     void rebase(int delta) {
-        this.nz = this.tailcuts.length;
+        int nz = this.tailcuts.length;
         for (int i = 0; i < this.tailcuts.length; ++i) {
             int v = this.get(i);
             if (v >= delta) {
                 v -= delta;
                 this.set(i, v);
                 if (v > 0) {
-                    --this.nz;
+                    --nz;
                 }
             }
         }
+        this.nz = nz;
     }
 
     int get(int off) {
@@ -56,6 +57,7 @@ class Registers {
     }
 
     Sum sum(int base) {
+        System.out.printf("sum: base %d\n", base);
         Sum res = new Sum();
         for (int r : this.tailcuts) {
             int v = base + r;

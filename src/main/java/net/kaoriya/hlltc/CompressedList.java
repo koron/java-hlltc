@@ -52,6 +52,7 @@ class CompressedList implements Iterable<Integer> {
             }
             x |= (int)this.b[j] << ((j - i) * 7);
             this.last = x + this.last;
+            this.i = j + 1;
             return this.last;
         }
     }
