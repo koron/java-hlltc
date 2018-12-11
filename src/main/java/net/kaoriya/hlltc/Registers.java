@@ -50,14 +50,13 @@ class Registers {
 
     void set(int off, int val) {
         val &= 0x0f;
-        if (this.tailcuts[off] != 0 && val == 0) {
+        if (this.tailcuts[off] == 0 && val != 0) {
             --this.nz;
         }
         this.tailcuts[off] = (byte)val;
     }
 
     Sum sum(int base) {
-        System.out.printf("sum: base %d\n", base);
         Sum res = new Sum();
         for (int r : this.tailcuts) {
             int v = base + r;
