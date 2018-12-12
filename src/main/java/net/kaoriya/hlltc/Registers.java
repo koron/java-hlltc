@@ -51,7 +51,7 @@ class Registers {
     void set(int off, int val) {
         val &= 0x0f;
         if (this.tailcuts[off] == 0 && val != 0) {
-            --this.nz;
+            //--this.nz;
         }
         this.tailcuts[off] = (byte)val;
     }

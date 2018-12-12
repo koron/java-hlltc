@@ -17,16 +17,16 @@ public class Sketch {
     final static int PP = 25;
     final static int MP = 1 << PP;
 
-    private boolean sparse;
+    boolean sparse;
 
-    private int p; //uint8
-    private int b; //uint8
-    private int m; //uint32
-    private double alpha; // float64
+    int p; //uint8
+    int b; //uint8
+    int m; //uint32
+    double alpha; // float64
 
-    private HashSet<Integer> tmpSet;
-    private CompressedList sparseList;
-    private Registers regs;
+    HashSet<Integer> tmpSet;
+    CompressedList sparseList;
+    Registers regs;
 
     public Sketch() {
         this(14);
