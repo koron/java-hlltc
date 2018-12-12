@@ -13,6 +13,20 @@ class Sparse {
         this.r = r;
     }
 
+    boolean equals(Sparse other) {
+        if (other == null) {
+            return false;
+        }
+        if (other == this) {
+            return true;
+        }
+        return other.i == this.i && other.r == this.r;
+    }
+
+    public String toString() {
+        return String.format("Sparse{i=%d, r=%02x}", i, r);
+    }
+
     static int encodeHash(long x, int p, int pp) {
         long idx = Utils.bextr(x, 64-pp, pp);
         if (Utils.bextr(x, 64-pp, pp-p) == 0) {
@@ -29,7 +43,7 @@ class Sparse {
         if ((k & 1) != 0) {
             sp.r = (Utils.bextr32(k, 1, 6) & 0xff) + pp - p;
         } else {
-            long n = (long)k << (32 - pp + p - 1);
+            long n = ((long)(k << (32 - pp + p - 1))) & 0xffffffffL;
             sp.r = Long.numberOfLeadingZeros(n) - 31;
         }
         return sp;
@@ -37,7 +51,7 @@ class Sparse {
 
     static Sparse getPosVal(long x, int p) {
         long i = Utils.bextr(x, 64 - p, p);
-        long w = (x << p) | 1 << (p - 1);
+        long w = (x << p) | (1L << (p - 1));
         int rho = Long.numberOfLeadingZeros(w) + 1;
         return new Sparse((int)i, rho);
     }

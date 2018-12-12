@@ -33,15 +33,23 @@ public class Sketch {
     }
 
     public Sketch(int precision) {
+        this(precision, true);
+    }
+
+    Sketch(int precision, boolean sparse) {
         if (precision < 4 || precision > 18) {
             throw new IllegalArgumentException("p has to be >= 4 and <= 18");
         }
         this.p = precision;
         this.m = 1 << precision;
         this.alpha = Utils.alpha(m);
-        this.tmpSet = new HashSet<Integer>();
-        this.sparse = true;
-        this.sparseList = new CompressedList(m);
+        if (sparse) {
+            this.sparse = true;
+            this.tmpSet = new HashSet<Integer>();
+            this.sparseList = new CompressedList(m);
+        } else {
+            this.regs = new Registers(this.m);
+        }
     }
 
     public Sketch clone() {
@@ -209,10 +217,6 @@ outer:
         }
     }
 
-    void dumpSparse(String label) {
-        System.out.printf("sparse (%s): tmp=%d, list=%d (%d)\n", label, tmpSet.size(), sparseList.count, sparseList.size());
-    }
-
     public void insert(byte[] d) {
         long x = Utils.hash(d);
         this.insertHash(Utils.hash(d));
@@ -236,19 +240,16 @@ outer:
     public long estimate() {
         if (this.sparse) {
             this.mergeSparse();
-            System.out.printf("HERE_A0: mp=%d sp=%d\n", MP, this.sparseList.count);
             return (long)Utils.linearCount(MP, MP - this.sparseList.count);
         }
 
         Registers.Sum sum = this.regs.sum(this.b);
 
         if (this.b != 0) {
-            System.out.printf("HERE_A1: alpha=%f m=%d sum=%f\n", alpha, m, sum.sum);
             return (long)(this.alpha * this.m * this.m / sum.sum + 0.5);
         }
 
         double beta = this.p < 16 ? Utils.beta14(sum.ez) : Utils.beta16(sum.ez);
-        System.out.printf("HERE_A2: alpha=%f beta=%f m=%d sum=%f ez=%d\n", alpha, beta, m, sum.sum, sum.ez);
         return (long)(this.alpha * this.m * (this.m - sum.ez) / (sum.sum + beta) + 0.5);
     }
 

@@ -4,7 +4,7 @@ import util.hash.MetroHash;
 
 class Utils {
     static long bextr(long v, int start, int len) {
-        return (v >>> start) & ((1 << len) - 1);
+        return (v >>> start) & ((1L << len) - 1);
     }
 
     static int bextr32(int v, int start, int len) {
@@ -12,7 +12,7 @@ class Utils {
     }
 
     static long hash(byte[] d) {
-        return MetroHash.hash64(d).get();
+        return MetroHash.hash64(1337, d).get();
     }
 
     static double linearCount(int m, int v) {
