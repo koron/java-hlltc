@@ -22,7 +22,7 @@ class Registers {
     }
 
     protected Registers clone() {
-        Registers r = new Registers(this.nz);
+        Registers r = new Registers(this.tailcuts.length);
         for (int i = 0; i <  r.tailcuts.length; ++i) {
             r.tailcuts[i] = this.tailcuts[i];
         }
@@ -51,7 +51,7 @@ class Registers {
     void set(int off, int val) {
         val &= 0x0f;
         if (this.tailcuts[off] == 0 && val != 0) {
-            //--this.nz;
+            --this.nz;
         }
         this.tailcuts[off] = (byte)val;
     }

@@ -17,10 +17,17 @@ public class SketchTest {
     }
 
     static void assertErrorRatio(Sketch sk, long exp, double th) {
+        assertErrorRatio(sk, exp, th, false);
+    }
+
+    static void assertErrorRatio(Sketch sk, long exp, double th, boolean verbose) {
         long res = sk.estimate();
         double ratio = 100 * estimateError(res, exp);
         if (ratio > th) {
             fail(String.format("exact %d, got %d which is %.2f%% error", exp, res, ratio));
+        }
+        if (verbose) {
+            System.out.printf("OK: exact %d, got %d which is %.2f%% error\n", exp, res, ratio);
         }
     }
 
@@ -143,5 +150,22 @@ public class SketchTest {
 
         sk2.merge(sk3);
         assertErrorRatio(sk2, unique.size(), 1);
+    }
+
+    //@Test
+    public void insertRebase() {
+        System.out.println("insertRebase");
+        Sketch sk = new Sketch(14);
+        long exp = 0;
+        int b = 0;
+        for (int i = 1; i <= 10000000; i++) {
+            String str = String.format("flow-%d", i);
+            sk.insert(str.getBytes());
+            if (sk.b > b) {
+                assertErrorRatio(sk, i, 2, true);
+                b = sk.b;
+            }
+        }
+        assertErrorRatio(sk, 10000000, 2, true);
     }
 }
