@@ -4,6 +4,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Iterator;
 
 class CompressedList implements Iterable<Integer> {
@@ -94,5 +95,21 @@ class CompressedList implements Iterable<Integer> {
         v.count = in.readInt();
         v.last = in.readInt();
         return v;
+    }
+
+    static boolean equals(CompressedList a, CompressedList b) {
+        if (a == null && b == null) {
+            return true;
+        }
+        if (a == null || b == null) {
+            return false;
+        }
+        if (a.count != b.count) {
+            return false;
+        }
+        if (a.last != b.last) {
+            return false;
+        }
+        return Arrays.equals(a.b.toByteArray(), b.b.toByteArray());
     }
 }

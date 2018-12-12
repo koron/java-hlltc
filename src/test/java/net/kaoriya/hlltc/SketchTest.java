@@ -119,7 +119,6 @@ public class SketchTest {
 
     @Test
     public void mergeComplex() {
-        System.out.println("mergeComplex");
         Sketch sk1 = new Sketch(14);
         Sketch sk2 = new Sketch(14);
         Sketch sk3 = new Sketch(14);
@@ -135,10 +134,8 @@ public class SketchTest {
         }
 
         assertErrorRatio(sk1, unique.size(), 2);
-
         assertErrorRatio(sk2, unique.size() / 2, 2);
 
-        System.out.println("HERE_A0");
         sk2.merge(sk1);
         assertErrorRatio(sk2, unique.size(), 2);
 
@@ -152,9 +149,8 @@ public class SketchTest {
         assertErrorRatio(sk2, unique.size(), 1);
     }
 
-    //@Test
+    @Test
     public void insertRebase() {
-        System.out.println("insertRebase");
         Sketch sk = new Sketch(14);
         long exp = 0;
         int b = 0;
@@ -167,5 +163,81 @@ public class SketchTest {
             }
         }
         assertErrorRatio(sk, 10000000, 2, true);
+    }
+
+    static void assertSketch(Sketch exp, Sketch act) {
+        assertSketch(exp, act, false);
+    }
+
+    static void assertSketch(Sketch exp, Sketch act, boolean verbose) {
+        assertEquals(exp.sparse, act.sparse);
+        assertEquals(exp.p, act.p);
+        assertEquals(exp.b, act.b);
+        assertEquals(exp.m, act.m);
+        assertEquals(exp.alpha, act.alpha, 0.01f);
+        assertEquals(exp.tmpSet, act.tmpSet);
+        assertTrue("sparseList should equal",
+                CompressedList.equals(exp.sparseList, act.sparseList));
+        assertTrue("regs should equals",
+                Registers.equals(exp.regs, act.regs));
+    }
+
+    @Test
+    public void toFromBytesSparse() throws Exception {
+        Random rnd = new Random();
+        for (int i = 0; i < 100; i++) {
+            Sketch sk = new Sketch(4, true);
+            assertTrue(sk.sparse);
+            sk.tmpSet.add(26);
+            sk.tmpSet.add(40);
+
+            for (int j = 0; j < 10; j++) {
+                sk.sparseList.add(rnd.nextInt());
+            }
+
+            byte[] data = sk.toBytes();
+            assertEquals(Sketch.VERSION, data[0]);
+            assertEquals((byte)0x04, data[1]); // p
+            assertEquals((byte)0x00, data[2]); // b
+            assertEquals((byte)0x01, data[3]); // sparse
+
+            Sketch res = Sketch.fromBytes(data);
+            assertSketch(sk, res);
+        }
+    }
+
+    static String bytesToString(byte[] bytes) {
+        StringBuilder sb = new StringBuilder();
+        boolean first = true;
+        for (byte b : bytes) {
+            if (!first) {
+                sb.append(' ');
+            }
+            sb.append(String.format("%02x", b));
+            first = false;
+        }
+        return sb.toString();
+    }
+
+    @Test
+    public void toFromBytesDense() throws Exception {
+        Random rnd = new Random();
+        for (int i = 0; i < 100; i++) {
+            Sketch sk = new Sketch(4, false);
+            assertFalse(sk.sparse);
+
+            for (int j = 0; j < 10; j++) {
+                sk.regs.set(j, rnd.nextInt(0x10));
+            }
+
+            byte[] data = sk.toBytes();
+            assertEquals(Sketch.VERSION, data[0]);
+            assertEquals((byte)0x04, data[1]); // p
+            assertEquals((byte)0x00, data[2]); // b
+            assertEquals((byte)0x00, data[3]); // sparse
+
+            Sketch res = Sketch.fromBytes(data);
+            assertSketch(sk, res, true);
+        }
     }
 }

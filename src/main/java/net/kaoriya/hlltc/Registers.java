@@ -103,9 +103,22 @@ class Registers {
         Registers regs = new Registers(sz * 2);
         for (int i = 0; i < sz; i++) {
             byte b = data[i];
-            regs.set(i, b >>> 4);
-            regs.set(i+1, b & 0x0f);
+            regs.set(i * 2, b >>> 4);
+            regs.set(i * 2 + 1, b & 0x0f);
         }
         return regs;
+    }
+
+    static boolean equals(Registers a, Registers b) {
+        if (a == null && b == null) {
+            return true;
+        }
+        if (a == null || b == null) {
+            return false;
+        }
+        if (a.nz != b.nz) {
+            return false;
+        }
+        return Arrays.equals(a.tailcuts, b.tailcuts);
     }
 }
