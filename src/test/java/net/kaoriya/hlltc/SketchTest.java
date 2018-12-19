@@ -158,11 +158,11 @@ public class SketchTest {
             String str = String.format("flow-%d", i);
             sk.insert(str.getBytes());
             if (sk.b > b) {
-                assertErrorRatio(sk, i, 2, true);
+                assertErrorRatio(sk, i, 2);
                 b = sk.b;
             }
         }
-        assertErrorRatio(sk, 10000000, 2, true);
+        assertErrorRatio(sk, 10000000, 2);
     }
 
     static void assertSketch(Sketch exp, Sketch act) {
@@ -237,7 +237,7 @@ public class SketchTest {
             assertEquals((byte)0x00, data[3]); // sparse
 
             Sketch res = Sketch.fromBytes(data);
-            assertSketch(sk, res, true);
+            assertSketch(sk, res);
         }
     }
 }
