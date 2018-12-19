@@ -77,11 +77,11 @@ class CompressedList implements Iterable<Integer> {
     }
 
     void marshalTo(DataOutputStream out) throws IOException {
-        out.writeInt(this.b.size());
-        this.b.writeTo(out);
-
         out.writeInt(this.count);
         out.writeInt(this.last);
+
+        out.writeInt(this.b.size());
+        this.b.writeTo(out);
     }
 
     static CompressedList unmarshalFrom(DataInputStream in) throws IOException {

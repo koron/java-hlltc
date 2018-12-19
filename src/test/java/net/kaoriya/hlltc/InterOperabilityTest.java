@@ -3,8 +3,14 @@ package net.kaoriya.hlltc;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.util.concurrent.TimeUnit;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.IOUtils;
 
 public class InterOperabilityTest {
@@ -133,5 +139,56 @@ public class InterOperabilityTest {
 
         sk.merge(sk1);
         SketchTest.assertErrorRatio(sk, 1990000, 2);
+    }
+
+    static class StreamGobbler extends Thread {
+        InputStream is;
+
+        StreamGobbler(InputStream is) {
+            this.is = is;
+        }
+
+        public void run() {
+            try (InputStreamReader r = new InputStreamReader(is);
+                BufferedReader br = new BufferedReader(r)) {
+                String line = null;
+                while ((line = br.readLine()) != null) {
+                    System.out.println(line);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Test
+    public void golang() throws Exception {
+        // marshal sparse Sketch and generate files to read by golang.
+        Sketch sk1 = new Sketch(14, true);
+        for (int i = 1; i <= 3400; i++) {
+            sk1.insert(String.format("flow-%d", i).getBytes());
+        }
+        FileUtils.writeByteArrayToFile(
+                new File("src/test/go/testdata/sparse-14-3400.hlltc"),
+                sk1.toBytes());
+
+        // marshal dense Sketche and generate files to read by golang.
+        Sketch sk2 = new Sketch(14, false);
+        for (int i = 1; i <= 1000000; i++) {
+            sk2.insert(String.format("flow-%d", i).getBytes());
+        }
+        FileUtils.writeByteArrayToFile(
+                new File("src/test/go/testdata/dense-14-1M.hlltc"),
+                sk2.toBytes());
+
+        // run golang tests
+        ProcessBuilder pb = new ProcessBuilder("go", "test", "-v", "-count=1", "./src/test/go");
+        pb.redirectErrorStream(true);
+        Process proc = pb.start();
+        StreamGobbler out = new StreamGobbler(proc.getInputStream());
+        out.start();
+        proc.waitFor(30, TimeUnit.SECONDS);
+        int ret = proc.exitValue();
+        assertEquals(0, ret);
     }
 }
