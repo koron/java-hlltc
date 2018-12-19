@@ -85,15 +85,17 @@ class CompressedList implements Iterable<Integer> {
     }
 
     static CompressedList unmarshalFrom(DataInputStream in) throws IOException {
+        int count = in.readInt();
+        int last = in.readInt();
         int size = in.readInt();
 
         byte[] b = new byte[size];
         in.read(b);
         CompressedList v = new CompressedList(size);
         v.b.write(b);
+        v.count = count;
+        v.last = last;
 
-        v.count = in.readInt();
-        v.last = in.readInt();
         return v;
     }
 
@@ -111,5 +113,9 @@ class CompressedList implements Iterable<Integer> {
             return false;
         }
         return Arrays.equals(a.b.toByteArray(), b.b.toByteArray());
+    }
+
+    int getCount() {
+        return count;
     }
 }

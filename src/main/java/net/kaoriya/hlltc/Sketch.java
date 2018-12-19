@@ -309,7 +309,8 @@ outer:
         // unmarshal this.tmpSet
         int sz = in.readInt();
         for (int i = 0; i < sz; ++i) {
-            this.tmpSet.add(in.readInt());
+            int n = in.readInt();
+            this.tmpSet.add(n);
         }
 
         this.sparseList = CompressedList.unmarshalFrom(in);

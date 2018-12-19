@@ -4,6 +4,7 @@ plugins {
 
 dependencies {
     implementation 'com.adgear:metrohash:1.0.0'
+    testImplementation 'commons-io:commons-io:2.6'
     testImplementation 'junit:junit:4.12'
 }
 
