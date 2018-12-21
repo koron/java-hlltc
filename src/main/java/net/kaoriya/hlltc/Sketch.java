@@ -5,7 +5,6 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -80,7 +79,7 @@ public class Sketch {
             keys[i] = k;
             i++;
         }
-        Arrays.sort(keys);
+        Utils.sortUnsigned(keys);
 
         CompressedList list = new CompressedList(this.m);
         Iterator<Integer> iter = this.sparseList.iterator();
@@ -102,12 +101,13 @@ outer:
                     }
                     break outer;
                 }
-                int x2 = keys[i];
-                if (x1 == x2) {
+                final int x2 = keys[i];
+                final int d = Integer.compareUnsigned(x1, x2);
+                if (d == 0) {
                     list.add(x1);
                     ++i;
                     break;
-                } else if (x1 > x2) {
+                } else if (d > 0) {
                     list.add(x2);
                     ++i;
                     continue;

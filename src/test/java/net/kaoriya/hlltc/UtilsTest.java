@@ -24,4 +24,22 @@ public class UtilsTest {
         hashCheck("flow-8", 0x7126026e12357900L);
         hashCheck("flow-9", 0x6d78fb88c1de8b08L);
     }
+
+    @Test
+    public void sortUnsigned() {
+        int[] a1 = new int[]{ 3, 5, 1, 4, 2 };
+        assertArrayEquals(
+                new int[]{ 1, 2, 3, 4, 5 },
+                Utils.sortUnsigned(a1));
+
+        int[] a2 = new int[]{ 0, 2, -2, 1, -1 };
+        assertArrayEquals(
+                new int[]{ 0, 1, 2, -2, -1 },
+                Utils.sortUnsigned(a2));
+
+        int[] a3 = new int[]{ -1, 1, -3, 0, -2 };
+        assertArrayEquals(
+                new int[]{ 0, 1, -3, -2, -1 },
+                Utils.sortUnsigned(a3));
+    }
 }

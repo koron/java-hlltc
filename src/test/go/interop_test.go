@@ -11,11 +11,11 @@ import (
 
 func loadSketch(t *testing.T, name string) *hyperloglog.Sketch {
 	t.Helper()
-	sk := &hyperloglog.Sketch{}
 	b, err := ioutil.ReadFile(name)
 	if err != nil {
 		t.Fatalf("failed to read file: %s", err)
 	}
+	sk := &hyperloglog.Sketch{}
 	err = sk.UnmarshalBinary(b)
 	if err != nil {
 		t.Fatalf("failed to unmarshal sketoch: %s", err)

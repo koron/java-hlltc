@@ -191,4 +191,137 @@ public class InterOperabilityTest {
         int ret = proc.exitValue();
         assertEquals(0, ret);
     }
+
+    static byte[] genSparseBytes() throws Exception {
+        Sketch sk = new Sketch(14, true);
+        for (int i = 1; i <= 3400; i++) {
+            sk.insert(String.format("flow-%d", i).getBytes());
+        }
+        return sk.toBytes();
+    }
+
+    static byte[] genDenseBytes() throws Exception {
+        Sketch sk = new Sketch(14, false);
+        for (int i = 1; i <= 1000000; i++) {
+            sk.insert(String.format("flow-%d", i).getBytes());
+        }
+        return sk.toBytes();
+    }
+
+    @Test
+    public void reparseSparse() throws Exception {
+        byte[] b = genSparseBytes();
+        Sketch sk0 = Sketch.fromBytes(b);
+        Sketch sk1 = Sketch.fromBytes(b);
+        SketchTest.assertErrorRatio(sk0, 3400, 2);
+        SketchTest.assertErrorRatio(sk1, 3400, 2);
+
+        Sketch sk = new Sketch(14);
+        for (int i = 1; i <= 3400; i += 2) {
+            sk.insert(String.format("flow-%d", i).getBytes());
+        }
+        SketchTest.assertErrorRatio(sk, 1700, 2);
+
+        sk0.merge(sk);
+        SketchTest.assertErrorRatio(sk0, 3400, 2);
+
+        sk.merge(sk1);
+        SketchTest.assertErrorRatio(sk, 3400, 2);
+    }
+
+    @Test
+    public void reparseDense() throws Exception {
+        byte[] b = genDenseBytes();
+        Sketch sk0 = Sketch.fromBytes(b);
+        Sketch sk1 = Sketch.fromBytes(b);
+        SketchTest.assertErrorRatio(sk0, 1000000, 2);
+        SketchTest.assertErrorRatio(sk1, 1000000, 2);
+
+        Sketch sk = new Sketch(14);
+        for (int i = 1; i <= 1000000; i += 2) {
+            sk.insert(String.format("flow-%d", i).getBytes());
+        }
+        SketchTest.assertErrorRatio(sk, 500000, 2);
+        sk0.merge(sk);
+        SketchTest.assertErrorRatio(sk0, 1000000, 2);
+        sk.merge(sk1);
+        SketchTest.assertErrorRatio(sk, 1000000, 2);
+    }
+
+    @Test
+    public void reparseDense25per() throws Exception {
+        byte[] b = genDenseBytes();
+        Sketch sk0 = Sketch.fromBytes(b);
+        Sketch sk1 = Sketch.fromBytes(b);
+        SketchTest.assertErrorRatio(sk0, 1000000, 2);
+        SketchTest.assertErrorRatio(sk1, 1000000, 2);
+
+        Sketch sk = new Sketch(14);
+        for (int i = 1; i <= 1000000; i++) {
+            sk.insert(String.format("flow-%d", i + 250000).getBytes());
+        }
+        SketchTest.assertErrorRatio(sk, 1000000, 2);
+        sk0.merge(sk);
+        SketchTest.assertErrorRatio(sk0, 1250000, 2);
+        sk.merge(sk1);
+        SketchTest.assertErrorRatio(sk, 1250000, 2);
+    }
+
+    @Test
+    public void reparseDense50per() throws Exception {
+        byte[] b = genDenseBytes();
+        Sketch sk0 = Sketch.fromBytes(b);
+        Sketch sk1 = Sketch.fromBytes(b);
+        SketchTest.assertErrorRatio(sk0, 1000000, 2);
+        SketchTest.assertErrorRatio(sk1, 1000000, 2);
+
+        Sketch sk = new Sketch(14);
+        for (int i = 1; i <= 1000000; i++) {
+            sk.insert(String.format("flow-%d", i + 500000).getBytes());
+        }
+        SketchTest.assertErrorRatio(sk, 1000000, 2);
+        sk0.merge(sk);
+        SketchTest.assertErrorRatio(sk0, 1500000, 2);
+        sk.merge(sk1);
+        SketchTest.assertErrorRatio(sk, 1500000, 2);
+    }
+
+    @Test
+    public void reparseDense75per() throws Exception {
+        byte[] b = genDenseBytes();
+        Sketch sk0 = Sketch.fromBytes(b);
+        Sketch sk1 = Sketch.fromBytes(b);
+        SketchTest.assertErrorRatio(sk0, 1000000, 2);
+        SketchTest.assertErrorRatio(sk1, 1000000, 2);
+
+        Sketch sk = new Sketch(14);
+        for (int i = 1; i <= 1000000; i++) {
+            sk.insert(String.format("flow-%d", i + 750000).getBytes());
+        }
+        SketchTest.assertErrorRatio(sk, 1000000, 2);
+        sk0.merge(sk);
+        SketchTest.assertErrorRatio(sk0, 1750000, 2);
+        sk.merge(sk1);
+        SketchTest.assertErrorRatio(sk, 1750000, 2);
+    }
+
+    @Test
+    public void reparseDense99per() throws Exception {
+        byte[] b = genDenseBytes();
+        Sketch sk0 = Sketch.fromBytes(b);
+        Sketch sk1 = Sketch.fromBytes(b);
+        SketchTest.assertErrorRatio(sk0, 1000000, 2);
+        SketchTest.assertErrorRatio(sk1, 1000000, 2);
+
+        Sketch sk = new Sketch(14);
+        for (int i = 1; i <= 1000000; i++) {
+            sk.insert(String.format("flow-%d", i + 990000).getBytes());
+        }
+        SketchTest.assertErrorRatio(sk, 1000000, 2);
+        sk0.merge(sk);
+        SketchTest.assertErrorRatio(sk0, 1990000, 2);
+        sk.merge(sk1);
+        SketchTest.assertErrorRatio(sk, 1990000, 2);
+    }
+
 }

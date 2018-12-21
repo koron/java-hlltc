@@ -1,5 +1,7 @@
 package net.kaoriya.hlltc;
 
+import java.util.Arrays;
+
 import util.hash.MetroHash;
 
 class Utils {
@@ -53,5 +55,38 @@ class Utils {
                 return 0.709;
         }
 	return 0.7213 / (1 + 1.079/(double)m);
+    }
+
+    static int[] sortUnsigned(int[] a) {
+        final int end = a.length;
+        Arrays.sort(a);
+        int n = 0;
+        for (; n < end; ++n) {
+            if (a[n] >= 0) {
+                break;
+            }
+        }
+        if (n == 0 || n == end) {
+            return a;
+        }
+        final int m = end - n;
+        if (n <  end / 2) {
+            int[] tmp = Arrays.copyOfRange(a, 0, n);
+            for (int i = 0; i < m; ++i) {
+                a[i] = a[i + n];
+            }
+            for (int i = 0; i < n; ++i) {
+                a[i + m] = tmp[i];
+            }
+        } else {
+            int[] tmp = Arrays.copyOfRange(a, n, end);
+            for (int i = n - 1; i >= 0; --i) {
+                a[i + m] = a[i];
+            }
+            for (int i = 0; i < m; ++i) {
+                a[i] = tmp[i];
+            }
+        }
+        return a;
     }
 }
