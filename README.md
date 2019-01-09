@@ -36,7 +36,7 @@ for (int i = 0; i < 1000000; i++) {
 At last, you can estimate its cardinality with `Sketch#estimate()` method.
 
 ```java
-long cnt = sk.estimate()
+long cnt = sk.estimate();
 ```
 
 ### Serialization
@@ -48,7 +48,7 @@ You can serialize (get a byte arary of) a `Sketch` with `Sketch#toBytes()`
 method like this.
 
 ```java
-byte[] b = sk.toBytes()
+byte[] b = sk.toBytes();
 // TODO: write b to file or so.
 ```
 
@@ -61,7 +61,7 @@ serialize the byte array.
 Sketch sk2 = Sketch.fromBytes(b);
 
 // cnt2 will match with cnt.
-long cnt2 = sk2.estimate()
+long cnt2 = sk2.estimate();
 ```
 
 ### Merge Sketches
@@ -135,6 +135,19 @@ if err != nil {
 }
 ```
 
+## Appendix
 
+### Popular API signature
+
+*   `class Sketch`
+    *   `Sketch()` - constructor with default precision (14)
+    *   `void insert(byte[] d)` - insert/count a data
+    *   `long estimate()` - estimate cardinality
+    *   `byte[] toBytes() throws IOException` - serialize as byte array
+    *   `static Sketch fromBytes(byte[] b) throws IOException` -
+        deserialize from byte array
+    *   `Sketch merge(Sketch other)` - merge other `Sketch` to this
+    *   `Sketch(int precision)` - constructor with precision (between 4 and 18)
+    *   `Sketch clone()` - create a clone of the `Sketch`
 
 [ax]:https://github.com/axiomhq/hyperloglog
