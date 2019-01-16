@@ -7,6 +7,9 @@ on serialization format with it.
 
 ## Pre-requirements
 
+java-hlltc is available on [jcenter/bintray][latest].
+
+
 ### for Maven
 
 Add this to your pom.xml:
@@ -188,4 +191,5 @@ if err != nil {
     *   `Sketch(int precision)` - constructor with precision (between 4 and 18)
     *   `Sketch clone()` - create a clone of the `Sketch`
 
+[latest]:https://bintray.com/koron/hlltc/net.kaoriya.hlltc/_latestVersion
 [ax]:https://github.com/axiomhq/hyperloglog
