@@ -141,56 +141,56 @@ public class InterOperabilityTest {
         SketchTest.assertErrorRatio(sk, 1990000, 2);
     }
 
-    static class StreamGobbler extends Thread {
-        InputStream is;
+    //static class StreamGobbler extends Thread {
+    //    InputStream is;
 
-        StreamGobbler(InputStream is) {
-            this.is = is;
-        }
+    //    StreamGobbler(InputStream is) {
+    //        this.is = is;
+    //    }
 
-        public void run() {
-            try (InputStreamReader r = new InputStreamReader(is);
-                BufferedReader br = new BufferedReader(r)) {
-                String line = null;
-                while ((line = br.readLine()) != null) {
-                    System.out.println(line);
-                }
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-        }
-    }
+    //    public void run() {
+    //        try (InputStreamReader r = new InputStreamReader(is);
+    //            BufferedReader br = new BufferedReader(r)) {
+    //            String line = null;
+    //            while ((line = br.readLine()) != null) {
+    //                System.out.println(line);
+    //            }
+    //        } catch (IOException e) {
+    //            e.printStackTrace();
+    //        }
+    //    }
+    //}
 
-    @Test
-    public void golang() throws Exception {
-        // marshal sparse Sketch and generate files to read by golang.
-        Sketch sk1 = new Sketch(14, true);
-        for (int i = 1; i <= 3400; i++) {
-            sk1.insert(String.format("flow-%d", i).getBytes());
-        }
-        FileUtils.writeByteArrayToFile(
-                new File("src/test/go/testdata/sparse-14-3400.hlltc"),
-                sk1.toBytes());
+    //@Test
+    //public void golang() throws Exception {
+    //    // marshal sparse Sketch and generate files to read by golang.
+    //    Sketch sk1 = new Sketch(14, true);
+    //    for (int i = 1; i <= 3400; i++) {
+    //        sk1.insert(String.format("flow-%d", i).getBytes());
+    //    }
+    //    FileUtils.writeByteArrayToFile(
+    //            new File("src/test/go/testdata/sparse-14-3400.hlltc"),
+    //            sk1.toBytes());
 
-        // marshal dense Sketche and generate files to read by golang.
-        Sketch sk2 = new Sketch(14, false);
-        for (int i = 1; i <= 1000000; i++) {
-            sk2.insert(String.format("flow-%d", i).getBytes());
-        }
-        FileUtils.writeByteArrayToFile(
-                new File("src/test/go/testdata/dense-14-1M.hlltc"),
-                sk2.toBytes());
+    //    // marshal dense Sketche and generate files to read by golang.
+    //    Sketch sk2 = new Sketch(14, false);
+    //    for (int i = 1; i <= 1000000; i++) {
+    //        sk2.insert(String.format("flow-%d", i).getBytes());
+    //    }
+    //    FileUtils.writeByteArrayToFile(
+    //            new File("src/test/go/testdata/dense-14-1M.hlltc"),
+    //            sk2.toBytes());
 
-        // run golang tests
-        ProcessBuilder pb = new ProcessBuilder("go", "test", "-v", "-count=1", "./src/test/go");
-        pb.redirectErrorStream(true);
-        Process proc = pb.start();
-        StreamGobbler out = new StreamGobbler(proc.getInputStream());
-        out.start();
-        proc.waitFor(30, TimeUnit.SECONDS);
-        int ret = proc.exitValue();
-        assertEquals(0, ret);
-    }
+    //    // run golang tests
+    //    ProcessBuilder pb = new ProcessBuilder("go", "test", "-v", "-count=1", "./src/test/go");
+    //    pb.redirectErrorStream(true);
+    //    Process proc = pb.start();
+    //    StreamGobbler out = new StreamGobbler(proc.getInputStream());
+    //    out.start();
+    //    proc.waitFor(30, TimeUnit.SECONDS);
+    //    int ret = proc.exitValue();
+    //    assertEquals(0, ret);
+    //}
 
     static byte[] genSparseBytes() throws Exception {
         Sketch sk = new Sketch(14, true);

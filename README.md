@@ -5,6 +5,28 @@ java-hlltc is an implementation of HyperLogLog-TailCut+.
 This is a port of [axiomhq/hyperloglog][ax] and have compatibility
 on serialization format with it.
 
+## Pre-requirements
+
+### for Maven
+
+Add this to your pom.xml:
+
+```pom
+<dependency>
+  <groupId>net.kaoriya</groupId>
+  <artifactId>hlltc</artifactId>
+  <version>0.9.1</version>
+  <type>pom</type>
+</dependency>
+```
+
+### for Gradle
+
+Copy this to your `dependencies` section.
+
+```groovy
+compile 'net.kaoriya:hlltc:0.9.1'
+```
 
 ## Getting Started
 
