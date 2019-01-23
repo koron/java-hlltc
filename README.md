@@ -176,6 +176,8 @@ if err != nil {
 | 10000000 |**9952687 (0.4731% off)**| 9881121 (1.1888% off)  |**9952681 (0.4732% off)**| 9881119 (1.1888% off)  |  9889556 (1.1044% off)  |
 | **Size** |                   8200  |                 16392  |                   8200  |                 16392  |                  16391  |
 
+See [here][benchmark_dir] for other benchmarks.
+
 ## Appendix
 
 ### Popular API signature
@@ -193,3 +195,4 @@ if err != nil {
 
 [latest]:https://bintray.com/koron/hlltc/net.kaoriya.hlltc/_latestVersion
 [ax]:https://github.com/axiomhq/hyperloglog
+[benchmark_dir]:tree/master/benchmark
