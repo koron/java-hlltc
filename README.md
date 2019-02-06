@@ -19,7 +19,6 @@ Add this to your pom.xml:
   <groupId>net.kaoriya</groupId>
   <artifactId>hlltc</artifactId>
   <version>0.9.1</version>
-  <type>pom</type>
 </dependency>
 ```
 
