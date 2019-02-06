@@ -6,7 +6,6 @@ import static org.junit.Assert.*;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.util.HashSet;
 import java.util.Random;
 
 public class SketchTest {
@@ -35,19 +34,19 @@ public class SketchTest {
     public void cardinalityHashed() {
         Sketch sk = new Sketch(14);
         int step = 10;
-        HashSet<String> uniq = new HashSet<>();
+        long uniq = 0;
 
-        for (int i = 0; uniq.size() < 10000000; ++i) {
+        for (int i = 0; uniq < 10000000; ++i) {
             String key = String.format("flow-%d", i);
             sk.insert(key.getBytes());
-            uniq.add(key);
+            uniq++;
 
-            if (uniq.size() % step == 0) {
+            if (uniq % step == 0) {
                 step *= 5;
-                assertErrorRatio(sk, uniq.size(), 2);
+                assertErrorRatio(sk, uniq, 2);
             }
         }
-        assertErrorRatio(sk, uniq.size(), 2);
+        assertErrorRatio(sk, uniq, 2);
     }
 
     static byte[] toBytes(long v) throws IOException {
@@ -123,30 +122,30 @@ public class SketchTest {
         Sketch sk2 = new Sketch(14);
         Sketch sk3 = new Sketch(14);
 
-        HashSet<String> unique = new HashSet<>();
+        long unique = 0;
         for (int i = 1; i <= 10000000; i++) {
             String str = String.format("flow-%d", i);
             sk1.insert(str.getBytes());
             if ((i % 2) == 0) {
                 sk2.insert(str.getBytes());
             }
-            unique.add(str);
+            unique++;
         }
 
-        assertErrorRatio(sk1, unique.size(), 2);
-        assertErrorRatio(sk2, unique.size() / 2, 2);
+        assertErrorRatio(sk1, unique, 2);
+        assertErrorRatio(sk2, unique / 2, 2);
 
         sk2.merge(sk1);
-        assertErrorRatio(sk2, unique.size(), 2);
+        assertErrorRatio(sk2, unique, 2);
 
         for (int i = 1; i < 500000; i++) {
             String str = String.format("stream-%d", i);
             sk2.insert(str.getBytes());
-            unique.add(str);
+            unique++;
         }
 
         sk2.merge(sk3);
-        assertErrorRatio(sk2, unique.size(), 1);
+        assertErrorRatio(sk2, unique, 1);
     }
 
     @Test
