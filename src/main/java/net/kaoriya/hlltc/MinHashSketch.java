@@ -15,7 +15,7 @@ public class MinHashSketch {
     final static int P = 14;
     final static int M = 1 << P;
     final static int MAX = 64 - P;
-    final static long MAXX = Long.MAX_VALUE >>> MAX;
+    final static long MAXX = (1 << MAX) - 1;
     final static double ALPHA = 0.7213 / (1 + 1.079 / (double)(M));
     final static int Q = 6;
     final static int R = 10;
@@ -34,7 +34,7 @@ public class MinHashSketch {
         }
         Reg(long x, long y) {
             byte lz = (byte)(Long.numberOfLeadingZeros((x << P)^MAXX) + 1);
-            short sig = (short)(y << (64 - R) >>> (64 - R));
+            short sig = (short)(y & ((1 << R) - 1));
             this.lz = lz;
             this.sig = sig;
         }
