@@ -277,7 +277,7 @@ outer:
              DataInputStream in = new DataInputStream(bin)) {
             int version = in.readUnsignedByte();
             if (version != VERSION) {
-                throw new RuntimeException("unsupported version");
+                throw new IOException("unsupported version");
             }
             int p = in.readUnsignedByte();
             Sketch sk = new Sketch(p);
