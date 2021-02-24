@@ -182,6 +182,9 @@ See [here][benchmark_dir] for other benchmarks.
 ### Popular API signature
 
 *   `class Sketch`
+
+    Small footprint HyperLogLog.
+
     *   `Sketch()` - constructor with default precision (14)
     *   `void insert(byte[] d)` - insert/count a data
     *   `long estimate()` - estimate cardinality
@@ -191,6 +194,21 @@ See [here][benchmark_dir] for other benchmarks.
     *   `Sketch merge(Sketch other)` - merge other `Sketch` to this
     *   `Sketch(int precision)` - constructor with precision (between 4 and 18)
     *   `Sketch clone()` - create a clone of the `Sketch`
+
+*   `class MinHashSketch`
+
+    Pure HyperLogLog + MinHash. Intersection estimation.
+
+    *   `MinHashSketch()` - constructor with default precision (14)
+    *   `void add(byte[] d)` - insert/count a data
+    *   `long cardinality()` - estimate cardinality
+    *   `void merge(MinHashSketch other)` - merge other `MinHashSketch` to this
+    *   `double similarity(MinHashSketch other)` - estimate similarity
+    *   `long intersection(MinHashSketch other)` - estimate intersection
+    *   `byte[] toBytes() throws IOException` - serialize as byte array
+    *   `static MinHashSketch fromBytes(byte[] b) throws IOException` -
+        deserialize from byte array
+    *   `MinHashSketch clone()` - create a clone of the `MinHashSketch`
 
 [latest]:https://bintray.com/koron/hlltc/net.kaoriya.hlltc/_latestVersion
 [ax]:https://github.com/axiomhq/hyperloglog
