@@ -18,7 +18,7 @@ Add this to your pom.xml:
 <dependency>
   <groupId>net.kaoriya</groupId>
   <artifactId>hlltc</artifactId>
-  <version>0.9.1</version>
+  <version>0.10.0</version>
 </dependency>
 ```
 
@@ -27,7 +27,7 @@ Add this to your pom.xml:
 Copy this to your `dependencies` section.
 
 ```groovy
-compile 'net.kaoriya:hlltc:0.9.1'
+compile 'net.kaoriya:hlltc:0.10.0'
 ```
 
 ## Getting Started
