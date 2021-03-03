@@ -1,34 +1,89 @@
 # java-hlltc
 
-java-hlltc is an implementation of HyperLogLog-TailCut+.
+java-hlltc is an implementation of HyperLogLog-TailCut+ for Java.
 
 This is a port of [axiomhq/hyperloglog][ax] and have compatibility
 on serialization format with it.
 
+And this includes [axiomhq/hyperminhash][hmh] also.
+
 ## Pre-requirements
 
-java-hlltc is available on [jcenter/bintray][latest].
+java-hlltc is available on [GitHub Packages][gp].
+([Japanese version][gp-ja])
+
+~java-hlltc is available on [jcenter/bintray][latest].~
 
 
 ### for Maven
 
-Add this to your pom.xml:
+1.  Create a personal access token with `read:packages` permission at <https://github.com/settings/tokens>
 
-```pom
-<dependency>
-  <groupId>net.kaoriya</groupId>
-  <artifactId>hlltc</artifactId>
-  <version>0.10.0</version>
-</dependency>
-```
+2.  Put username and token (`password`) to your ~/.m2/settings.xml file.
+
+    ```pom
+    <settings>
+      <servers>
+        <server>
+          <id>github</id>
+          <username>USERNAME</username>
+          <password>YOUR_PERSONAL_ACCESS_TOKEN_WITH_READ</password>
+        </server>
+      </servers>
+    </settings>
+    ```
+
+3.  Add a repository to your `repositories` section in project's pom.xml file.
+
+    ```pom
+    <repository>
+      <id>hlltc</id>
+      <url>https://maven.pkg.github.com/koron/java-hlltc</url>
+    </repository>
+    ```
+
+4.  Add a `<dependency>` tag to your `<dependencies>` tag.
+
+    ```pom
+    <dependency>
+      <groupId>net.kaoriya</groupId>
+      <artifactId>hlltc</artifactId>
+      <version>0.10.2</version>
+    </dependency>
+    ```
+
+Please read [public document](https://docs.github.com/en/packages/guides/configuring-apache-maven-for-use-with-github-packages) also. ([Japanese](https://docs.github.com/ja/packages/guides/configuring-apache-maven-for-use-with-github-packages))
 
 ### for Gradle
 
-Copy this to your `dependencies` section.
+1.  Create a personal access token with `read:packages` permission at <https://github.com/settings/tokens>
 
-```groovy
-compile 'net.kaoriya:hlltc:0.10.0'
-```
+2.  Put username and token to your ~/.gradle/gradle.properties file.
+
+    ```
+    gpr.user=YOUR_USERNAME
+    gpr.key=YOUR_PERSONAL_ACCESS_TOKEN_WITH_READ:PACKAGES
+    ```
+
+3.  Add a repository to your `repositories` section in build.gradle file.
+
+    ```groovy
+    maven {
+        url = uri("https://maven.pkg.github.com/koron/java-hlltc")
+        credentials {
+            username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+            password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+        }
+    }
+    ```
+
+4.  Add an `implementation` to your `dependencies` section.
+
+    ```groovy
+    implementation 'net.kaoriya:hlltc:0.10.2'
+    ```
+
+Please read [public document](https://docs.github.com/en/packages/guides/configuring-gradle-for-use-with-github-packages) also. ([Japanese](https://docs.github.com/ja/packages/guides/configuring-gradle-for-use-with-github-packages)).
 
 ## Getting Started
 
@@ -159,6 +214,22 @@ if err != nil {
 }
 ```
 
+### Intersection with HyperMinHash sketch
+
+Prepare two `MinHashSketch` sketches.
+
+```java
+MinHashSketch sk1 = new MinHashSketch();
+MinHashSketch sk2 = new MinHashSketch();
+// TODO: `add()` data to sk1 and sk2.
+```
+
+Then `intersection()` returns estimated number of shared members in two sets.
+
+```java
+long res = sk1.intersection(sk2);
+```
+
 ## Benchmark
 
 | Exact    | hlltc-14                | hlltc-15               | axiom-14                | axiom-15               | Influx HLL+ (16391)     |
@@ -212,4 +283,7 @@ See [here][benchmark_dir] for other benchmarks.
 
 [latest]:https://bintray.com/koron/hlltc/net.kaoriya.hlltc/_latestVersion
 [ax]:https://github.com/axiomhq/hyperloglog
+[hmh]:https://github.com/axiomhq/hyperminhash
 [benchmark_dir]:tree/master/benchmark
+[gp]:https://docs.github.com/en/packages
+[gp-ja]:https://docs.github.com/ja/packages
