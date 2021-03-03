@@ -2,23 +2,17 @@ buildscript {
     repositories {
         jcenter()
     }
-    dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.8.4'
-    }
 }
 
 plugins {
     id 'java-library'
     id 'maven'
     id 'maven-publish'
-    //id 'com.jfrog.bintray'
 }
-
-apply plugin: 'com.jfrog.bintray'
 
 group = 'net.kaoriya'
 archivesBaseName = 'hlltc'
-version = '0.10.0'
+version = '0.10.2'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8
@@ -55,33 +49,21 @@ task javadocJar(type: Jar, dependsOn: javadoc) {
 artifacts {
     archives sourcesJar, javadocJar
 }
+
 publishing {
-    publications {
-        mavenJava(MavenPublication) {
-            from components.java
-            artifact sourcesJar
-            artifact javadocJar
+    repositories {
+        maven {
+            name = "GitHubPackages"
+            url = uri("https://maven.pkg.github.com/koron/java-hlltc")
+            credentials {
+                username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+                password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+            }
         }
     }
-}
-
-bintray {
-    user = project.hasProperty('bintray_user') ? bintray_user : ''
-    key = project.hasProperty('bintray_key') ? bintray_key : ''
-
-    publications = ['mavenJava']
-
-    pkg {
-        repo = 'hlltc'
-        name = 'net.kaoriya.hlltc'
-        licenses = ['Apache-2.0']
-        websiteUrl = 'https://github.com/koron/java-hlltc'
-        vcsUrl = 'https://github.com/koron/java-hlltc.git'
-        issueTrackerUrl = 'https://github.com/koron/java-hlltc/issues'
-
-        version {
-            name = project.version
-            desc = 'grand beta.2 release'
+    publications {
+        gpr(MavenPublication) {
+            from(components.java)
         }
     }
 }
