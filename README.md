@@ -16,7 +16,7 @@ java-hlltc is available on [GitHub Packages][gp].
 
 ### for Maven
 
-See <./example-project/pom.xml> for Maven project's settings also.
+See also [example project](./example-project/pom.xml) for Maven project's settings.
 
 1.  Create a personal access token with `read:packages` permission at <https://github.com/settings/tokens>
 
@@ -57,7 +57,7 @@ Please read [public document](https://docs.github.com/en/packages/guides/configu
 
 ### for Gradle
 
-See <./example-project/build.gradle> for Gradle project's settings also.
+See also [example project](./example-project/build.gradle) for Gradle project's settings.
 
 1.  Create a personal access token with `read:packages` permission at <https://github.com/settings/tokens>
 
