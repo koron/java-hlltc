@@ -23,7 +23,7 @@ dependencies {
     // This dependency is used by the application.
     implementation 'com.google.guava:guava:29.0-jre'
 
-    implementation 'net.kaoriya:hlltc:0.10.2'
+    implementation 'net.kaoriya:hlltc:0.11.0'
 }
 
 application {

@@ -12,7 +12,7 @@ plugins {
 
 group = 'net.kaoriya'
 archivesBaseName = 'hlltc'
-version = '0.10.2'
+version = '0.11.0'
 
 sourceCompatibility = 1.8
 targetCompatibility = 1.8

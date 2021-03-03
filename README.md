@@ -49,7 +49,7 @@ See also [example project](./example-project/pom.xml) for Maven project's settin
     <dependency>
       <groupId>net.kaoriya</groupId>
       <artifactId>hlltc</artifactId>
-      <version>0.10.2</version>
+      <version>0.11.0</version>
     </dependency>
     ```
 
@@ -83,7 +83,7 @@ See also [example project](./example-project/build.gradle) for Gradle project's 
 4.  Add an `implementation` to your `dependencies` section.
 
     ```groovy
-    implementation 'net.kaoriya:hlltc:0.10.2'
+    implementation 'net.kaoriya:hlltc:0.11.0'
     ```
 
 Please read [public document](https://docs.github.com/en/packages/guides/configuring-gradle-for-use-with-github-packages) also. ([Japanese](https://docs.github.com/ja/packages/guides/configuring-gradle-for-use-with-github-packages)).
