@@ -1,0 +1,32 @@
+plugins {
+    id 'application'
+}
+
+repositories {
+    // Use JCenter for resolving dependencies.
+    jcenter()
+
+    // use java-hlltc on GitHub Packages.
+    maven {
+        url = uri("https://maven.pkg.github.com/koron/java-hlltc")
+        credentials {
+            username = project.findProperty("gpr.user") ?: System.getenv("USERNAME")
+            password = project.findProperty("gpr.key") ?: System.getenv("TOKEN")
+        }
+    }
+}
+
+dependencies {
+    // Use JUnit test framework.
+    testImplementation 'junit:junit:4.13'
+
+    // This dependency is used by the application.
+    implementation 'com.google.guava:guava:29.0-jre'
+
+    implementation 'net.kaoriya:hlltc:0.10.2'
+}
+
+application {
+    // Define the main class for the application.
+    mainClass = 'example.App'
+}

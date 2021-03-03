@@ -14,8 +14,9 @@ java-hlltc is available on [GitHub Packages][gp].
 
 ~java-hlltc is available on [jcenter/bintray][latest].~
 
-
 ### for Maven
+
+See <./example-project/pom.xml> for Maven project's settings also.
 
 1.  Create a personal access token with `read:packages` permission at <https://github.com/settings/tokens>
 
@@ -37,7 +38,7 @@ java-hlltc is available on [GitHub Packages][gp].
 
     ```pom
     <repository>
-      <id>hlltc</id>
+      <id>github</id>
       <url>https://maven.pkg.github.com/koron/java-hlltc</url>
     </repository>
     ```
@@ -55,6 +56,8 @@ java-hlltc is available on [GitHub Packages][gp].
 Please read [public document](https://docs.github.com/en/packages/guides/configuring-apache-maven-for-use-with-github-packages) also. ([Japanese](https://docs.github.com/ja/packages/guides/configuring-apache-maven-for-use-with-github-packages))
 
 ### for Gradle
+
+See <./example-project/build.gradle> for Gradle project's settings also.
 
 1.  Create a personal access token with `read:packages` permission at <https://github.com/settings/tokens>
 
