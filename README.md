@@ -19,7 +19,7 @@ java-hlltc is available on [GitHub Packages][gp].
 
 1.  Create a personal access token with `read:packages` permission at <https://github.com/settings/tokens>
 
-2.  Put username and token (`password`) to your ~/.m2/settings.xml file.
+2.  Put username and token to your ~/.m2/settings.xml file with `<server>` tag.
 
     ```pom
     <settings>
