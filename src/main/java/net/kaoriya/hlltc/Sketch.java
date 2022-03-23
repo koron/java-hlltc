@@ -218,7 +218,6 @@ outer:
     }
 
     public void insert(byte[] d) {
-        long x = Utils.hash(d);
         this.insertHash(Utils.hash(d));
     }
 
