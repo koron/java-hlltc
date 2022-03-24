@@ -16,6 +16,27 @@ public class Sketch {
     final static int PP = 25;
     final static int MP = 1 << PP;
 
+    public boolean getSparse() { return sparse; }
+    public int getPercision() { return p; }
+    public Sketch convertNormal() {
+        if (sparse) {
+            this.mergeSparse();
+            toNormal();
+        }
+        return this;
+    }
+    public String dumpString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Sketch{\n")
+            .append("  p=").append(p).append('\n')
+            .append("  b=").append(b).append('\n')
+            .append("  m=").append(m).append('\n')
+            .append("  alpha=").append(alpha).append('\n')
+            .append("  sparse=").append(sparse).append('\n')
+            .append("}");
+        return sb.toString();
+    }
+
     int p; //uint8
     int b; //uint8
     int m; //uint32
