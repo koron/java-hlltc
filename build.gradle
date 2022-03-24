@@ -3,6 +3,7 @@
 plugins {
     id 'java-library'
     id 'maven-publish'
+    id 'application'
 }
 
 repositories {
@@ -21,19 +22,17 @@ dependencies {
     implementation 'com.adgear:metrohash:1.0.0'
     testImplementation 'commons-io:commons-io:2.6'
     testImplementation 'junit:junit:4.13'
+
+    implementation 'com.google.guava:guava:30.0-jre'
 }
 
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
-//install {
-//    repositories.mavenInstaller {
-//        pom.project {
-//            name 'hlltc'
-//        }
-//    }
-//}
+application {
+    mainClass.set('net.kaoriya.hlltc_exp1.Example')
+}
 
 // custom tasks for creating source/javadoc jars
 task sourcesJar(type: Jar, dependsOn: classes) {
