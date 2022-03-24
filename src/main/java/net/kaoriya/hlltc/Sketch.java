@@ -16,12 +16,12 @@ public class Sketch {
     final static int PP = 25;
     final static int MP = 1 << PP;
 
-    boolean sparse;
-
     int p; //uint8
     int b; //uint8
     int m; //uint32
     double alpha; // float64
+
+    boolean sparse;
 
     HashSet<Integer> tmpSet;
     CompressedList sparseList;
@@ -56,6 +56,7 @@ public class Sketch {
         sk.b = this.b;
         sk.m = this.m;
         sk.alpha = this.alpha;
+        sk.sparse = this.sparse;
         if (this.tmpSet != null) {
             sk.tmpSet = new HashSet<Integer>(this.tmpSet);
         }
