@@ -184,6 +184,7 @@ outer:
                 this.tmpSet.add(n);
             }
             this.maybeToNormal();
+            System.out.println("    sparse + sparse");
             return this;
         }
 
@@ -192,6 +193,7 @@ outer:
         }
 
         if (other.sparse) {
+            int old = this.b;
             for (int k : other.tmpSet) {
                 Sparse sp = Sparse.decodeHash(k, other.p, PP);
                 this.insert(sp);
@@ -200,10 +202,12 @@ outer:
                 Sparse sp = Sparse.decodeHash(k, other.p, PP);
                 this.insert(sp);
             }
+            System.out.println(String.format("    dense + sparse: %d -> %d: o.tmp=%d o.sp=%d", old, this.b, other.tmpSet.size(), other.sparseList.size()));
             return this;
         }
 
         Sketch cpOther = other.clone();
+        int diff = this.b - cpOther.b;
         if (this.b < cpOther.b) {
             this.regs.rebase(cpOther.b - this.b);
             this.b = cpOther.b;
@@ -219,6 +223,7 @@ outer:
             }
         }
 
+        System.out.println(String.format("    dense + dense: %d", diff));
         return this;
     }
 

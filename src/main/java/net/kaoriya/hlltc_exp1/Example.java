@@ -39,9 +39,13 @@ public class Example {
 
         for (final String line : lines) {
             final Sketch sketch = Sketch.fromBytes(BASE64.decode(line));
+            //if (sketch.getSparse()) {
+            //    continue;
+            //}
             long est = sketch.estimate();
             estimatedSummary += est;
             mergedSketch.merge(sketch);
+            /*
             if (sketch.getSparse()) {
                 sparseSketch.merge(sketch);
                 sparseSum += est;
@@ -49,6 +53,7 @@ public class Example {
                 denseSketch.merge(sketch);
                 denseSum += est;
             }
+            */
             long curr = mergedSketch.clone().estimate();
             double err = estimateError(curr, estimatedSummary);
             ++x;
@@ -59,6 +64,8 @@ public class Example {
         //      estimatedSummary:2,154,967
         System.out.println(String.format("estimatedMergedSketch:%,d", mergedSketch.estimate()));
         // estimatedMergedSketch:6,293,092
+
+        System.out.println(String.format("E:%f", estimateError(mergedSketch.estimate(), estimatedSummary)));
 
         //System.out.println(String.format("sparseSum:  %,10d", sparseSum));
         //System.out.println(String.format("sparse.est: %,10d", sparseSketch.clone().estimate()));
