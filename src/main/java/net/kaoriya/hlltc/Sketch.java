@@ -194,13 +194,24 @@ outer:
 
         if (other.sparse) {
             int old = this.b;
+            int old2 = this.b;
             for (int k : other.tmpSet) {
                 Sparse sp = Sparse.decodeHash(k, other.p, PP);
                 this.insert(sp);
+                if (old2 != this.b) {
+                    System.out.println(String.format("    k=%08x", k));
+                    old2 = this.b;
+                } else if ((k & 1) != 0) {
+                    System.out.println(String.format("    K=%08x", k));
+                }
             }
             for (int k : other.sparseList) {
                 Sparse sp = Sparse.decodeHash(k, other.p, PP);
                 this.insert(sp);
+                if (old2 != this.b) {
+                    System.out.println(String.format("    k=%08x", k));
+                    old2 = this.b;
+                }
             }
             System.out.println(String.format("    dense + sparse: %d -> %d: o.tmp=%d o.sp=%d", old, this.b, other.tmpSet.size(), other.sparseList.size()));
             return this;
@@ -232,6 +243,7 @@ outer:
             // overflow
             int db = this.regs.min();
             if (db > 0) {
+                System.out.println(String.format("rebase: sp.r=%d this.b=%d db=%d", sp.r, this.b, db));
                 this.b += db;
                 this.regs.rebase(db);
             }
