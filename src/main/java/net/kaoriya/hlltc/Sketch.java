@@ -193,6 +193,9 @@ outer:
         }
 
         if (other.sparse) {
+            other = other.clone();
+            other.toNormal();
+            /*
             int old = this.b;
             int old2 = this.b;
             for (int k : other.tmpSet) {
@@ -215,6 +218,7 @@ outer:
             }
             System.out.println(String.format("    dense + sparse: %d -> %d: o.tmp=%d o.sp=%d", old, this.b, other.tmpSet.size(), other.sparseList.size()));
             return this;
+            */
         }
 
         Sketch cpOther = other.clone();
