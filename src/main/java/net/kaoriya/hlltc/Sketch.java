@@ -16,33 +16,12 @@ public class Sketch {
     final static int PP = 25;
     final static int MP = 1 << PP;
 
-    public boolean getSparse() { return sparse; }
-    public int getPercision() { return p; }
-    public Sketch convertNormal() {
-        if (sparse) {
-            this.mergeSparse();
-            toNormal();
-        }
-        return this;
-    }
-    public String dumpString() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("Sketch{\n")
-            .append("  p=").append(p).append('\n')
-            .append("  b=").append(b).append('\n')
-            .append("  m=").append(m).append('\n')
-            .append("  alpha=").append(alpha).append('\n')
-            .append("  sparse=").append(sparse).append('\n')
-            .append("}");
-        return sb.toString();
-    }
+    boolean sparse;
 
     int p; //uint8
     int b; //uint8
     int m; //uint32
     double alpha; // float64
-
-    boolean sparse;
 
     HashSet<Integer> tmpSet;
     CompressedList sparseList;
@@ -184,7 +163,6 @@ outer:
                 this.tmpSet.add(n);
             }
             this.maybeToNormal();
-            System.out.println("    sparse + sparse");
             return this;
         }
 
@@ -195,34 +173,9 @@ outer:
         if (other.sparse) {
             other = other.clone();
             other.toNormal();
-            /*
-            int old = this.b;
-            int old2 = this.b;
-            for (int k : other.tmpSet) {
-                Sparse sp = Sparse.decodeHash(k, other.p, PP);
-                this.insert(sp);
-                if (old2 != this.b) {
-                    System.out.println(String.format("    k=%08x", k));
-                    old2 = this.b;
-                } else if ((k & 1) != 0) {
-                    System.out.println(String.format("    K=%08x", k));
-                }
-            }
-            for (int k : other.sparseList) {
-                Sparse sp = Sparse.decodeHash(k, other.p, PP);
-                this.insert(sp);
-                if (old2 != this.b) {
-                    System.out.println(String.format("    k=%08x", k));
-                    old2 = this.b;
-                }
-            }
-            System.out.println(String.format("    dense + sparse: %d -> %d: o.tmp=%d o.sp=%d", old, this.b, other.tmpSet.size(), other.sparseList.size()));
-            return this;
-            */
         }
 
         Sketch cpOther = other.clone();
-        int diff = this.b - cpOther.b;
         if (this.b < cpOther.b) {
             this.regs.rebase(cpOther.b - this.b);
             this.b = cpOther.b;
@@ -238,7 +191,6 @@ outer:
             }
         }
 
-        System.out.println(String.format("    dense + dense: %d", diff));
         return this;
     }
 
@@ -247,7 +199,6 @@ outer:
             // overflow
             int db = this.regs.min();
             if (db > 0) {
-                System.out.println(String.format("rebase: sp.r=%d this.b=%d db=%d", sp.r, this.b, db));
                 this.b += db;
                 this.regs.rebase(db);
             }
@@ -357,4 +308,8 @@ outer:
 
         this.sparseList = CompressedList.unmarshalFrom(in);
     }
+
+    public boolean getSparse() { return sparse; }
+
+    public int getPercision() { return p; }
 }
