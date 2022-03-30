@@ -239,4 +239,28 @@ public class SketchTest {
             assertSketch(sk, res);
         }
     }
+
+    @Test
+    public void cloneSparse() throws Exception {
+        Sketch sk = new Sketch();
+        for (int i = 0; i < 1000; ++i) {
+            String key = String.format("flow-%d", i);
+            sk.insert(key.getBytes());
+        }
+        assertTrue(sk.sparse);
+        assertErrorRatio(sk, 1000, 2);
+        assertErrorRatio(sk.clone(), 1000, 2);
+    }
+
+    @Test
+    public void cloneDense() throws Exception {
+        Sketch sk = new Sketch();
+        for (int i = 0; i < 10000; ++i) {
+            String key = String.format("flow-%d", i);
+            sk.insert(key.getBytes());
+        }
+        assertFalse(sk.sparse);
+        assertErrorRatio(sk, 10000, 2);
+        assertErrorRatio(sk.clone(), 10000, 2);
+    }
 }

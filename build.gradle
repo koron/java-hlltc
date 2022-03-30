@@ -1,13 +1,14 @@
-buildscript {
-    repositories {
-        jcenter()
-    }
-}
+// vim:set ts=8 sts=2 sw=2 tw=0:
 
 plugins {
     id 'java-library'
-    id 'maven'
     id 'maven-publish'
+    id 'application'
+}
+
+repositories {
+  mavenCentral()
+  google()
 }
 
 group = 'net.kaoriya'
@@ -21,18 +22,16 @@ dependencies {
     implementation 'com.adgear:metrohash:1.0.0'
     testImplementation 'commons-io:commons-io:2.6'
     testImplementation 'junit:junit:4.13'
+
+    implementation 'com.google.guava:guava:30.0-jre'
 }
 
-repositories {
-    jcenter()
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }
 
-install {
-    repositories.mavenInstaller {
-        pom.project {
-            name 'hlltc'
-        }
-    }
+application {
+    mainClass.set('net.kaoriya.hlltc_exp1.Example')
 }
 
 // custom tasks for creating source/javadoc jars

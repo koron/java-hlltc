@@ -56,6 +56,7 @@ public class Sketch {
         sk.b = this.b;
         sk.m = this.m;
         sk.alpha = this.alpha;
+        sk.sparse = this.sparse;
         if (this.tmpSet != null) {
             sk.tmpSet = new HashSet<Integer>(this.tmpSet);
         }
@@ -170,15 +171,8 @@ outer:
         }
 
         if (other.sparse) {
-            for (int k : other.tmpSet) {
-                Sparse sp = Sparse.decodeHash(k, other.p, PP);
-                this.insert(sp);
-            }
-            for (int k : other.sparseList) {
-                Sparse sp = Sparse.decodeHash(k, other.p, PP);
-                this.insert(sp);
-            }
-            return this;
+            other = other.clone();
+            other.toNormal();
         }
 
         Sketch cpOther = other.clone();
@@ -314,4 +308,8 @@ outer:
 
         this.sparseList = CompressedList.unmarshalFrom(in);
     }
+
+    public boolean getSparse() { return sparse; }
+
+    public int getPercision() { return p; }
 }
